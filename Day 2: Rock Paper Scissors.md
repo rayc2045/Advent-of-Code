@@ -30,7 +30,7 @@ In this example, if you were to follow the strategy guide, you would get a total
 
 **What would your total score be if everything goes exactly according to your strategy guide?**
 
-### JavaScript Solution
+## JavaScript Solution
 
 ```javascript
 const input = `
