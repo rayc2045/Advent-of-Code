@@ -33,14 +33,14 @@ In this example, if you were to follow the strategy guide, you would get a total
 ## JavaScript Solution
 
 ```javascript
-const input = `
+const strategy = `
 A Y
-B X
-C Z
+B Z
+C X
 `;
 
 console.log(
-  input
+  strategy
     .trim().replaceAll(' ', '')
     .split('\n')
     .map(result => {
@@ -51,6 +51,6 @@ console.log(
       if (result[1] === 'Y') return score + 2;
       if (result[1] === 'Z') return score + 3;
     })
-    .reduce((total, current) => total + current)
+    .reduce((total, current) => total + current) // 24
 );
 ```
