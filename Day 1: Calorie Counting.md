@@ -61,10 +61,12 @@ const input = `
 10000
 `;
 
-return input
-  .trim()
-  .split('\n\n')
-  .map(calories => calories.split('\n').map(str => Number(str)))
-  .map(calories => calories.reduce((total, current) => total + current))
-  .sort((a, b) => b - a)[0];
+console.log(
+  input
+    .trim()
+    .split('\n\n')
+    .map(calories => calories.split('\n').map(str => Number(str)))
+    .map(calories => calories.reduce((total, current) => total + current))
+    .sort((a, b) => b - a)[0]
+);
 ```
