@@ -41,7 +41,7 @@ In case the Elves get hungry and need extra snacks, they need to know which Elf 
 
 Find the Elf carrying the most Calories. **How many total Calories is that Elf carrying?**
 
-### Solution
+### JavaScript Solution
 
 ```javascript
 const input = `
@@ -64,7 +64,7 @@ const input = `
 return input
   .trim()
   .split('\n\n')
-  .map(calory => calory.split('\n').map(str => Number(str)))
+  .map(calories => calories.split('\n').map(str => Number(str)))
   .map(calories => calories.reduce((total, current) => total + current))
   .sort((a, b) => b - a)[0];
 ```
