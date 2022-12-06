@@ -35,6 +35,8 @@ In the above example, the priority of the item type that appears in both compart
 
 Find the item type that appears in both compartments of each rucksack. *What is the sum of the priorities of those item types?*
 
+## JavaScript Solution
+
 ```javascript
 const list = `
 vJrwpWtwJgWrhcsFMMfFFhFp
@@ -45,25 +47,29 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
 `;
 
+const getItemType = (item1, item2) => {
+  for (const letter of item1) {
+    if (item2.includes(letter)) return letter;
+  }
+};
+
 const rucksacks = list
   .trim()
   .split('\n')
-  .map(str => ({
-    items: [str.slice(0, str.length / 2), str.slice(str.length / 2)],
-  }));
-
-rucksacks.forEach(rucksack => {
-  for (const letter of rucksack.items[0]) {
-    if (rucksack.items[1].includes(letter)) return (rucksack.itemType = letter);
-  }
-});
+  .map(str => {
+    const items = [str.slice(0, str.length / 2), str.slice(str.length / 2)];
+    return {
+      items,
+      itemType: getItemType(items[0], items[1]),
+    };
+  });
 
 const itemTypeList =
   'abcdefghijklmnopqrstuvwxyz' + 'abcdefghijklmnopqrstuvwxyz'.toUpperCase();
 
 console.log(
   rucksacks.reduce(
-    (sum, item) => sum + itemTypeList.indexOf(item.itemType) + 1,
+    (sum, rucksack) => sum + itemTypeList.indexOf(rucksack.itemType) + 1,
     0
   )
 );
