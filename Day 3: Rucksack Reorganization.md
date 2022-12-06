@@ -38,7 +38,7 @@ Find the item type that appears in both compartments of each rucksack. *What is 
 ## JavaScript Solution
 
 ```javascript
-const list = `
+const itemsList = `
 vJrwpWtwJgWrhcsFMMfFFhFp
 jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
 PmmdzqPrVvPwwTWBwg
@@ -53,7 +53,10 @@ const getItemType = (item1, item2) => {
   }
 };
 
-const rucksacks = list
+const itemTypeList =
+  'abcdefghijklmnopqrstuvwxyz' + 'abcdefghijklmnopqrstuvwxyz'.toUpperCase();
+
+const rucksacks = itemsList
   .trim()
   .split('\n')
   .map(str => {
@@ -64,10 +67,8 @@ const rucksacks = list
     };
   });
 
-const itemTypeList =
-  'abcdefghijklmnopqrstuvwxyz' + 'abcdefghijklmnopqrstuvwxyz'.toUpperCase();
-
 console.log(
+  // the sum of the priorities: 157
   rucksacks.reduce(
     (sum, rucksack) => sum + itemTypeList.indexOf(rucksack.itemType) + 1,
     0
