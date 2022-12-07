@@ -68,6 +68,12 @@ The Elves just need to know *which crate will end up on top of each stack*; in t
 ## JavaScript Solution
 
 ```javascript
+const crates = [
+  ['Z', 'N'],
+  ['M', 'C', 'D'],
+  ['P']
+];
+
 const rearrangementProcedure = `
 move 1 from 2 to 1
 move 3 from 1 to 3
@@ -75,7 +81,7 @@ move 2 from 2 to 1
 move 1 from 1 to 2
 `;
 
-const rearrangeCrates = (crates, procedure) => {
+function rearrangeCrates(crates, procedure) {
   const steps = procedure.trim().split('\n');
   for (const step of steps) {
     const split = step.split(' ');
@@ -83,19 +89,11 @@ const rearrangeCrates = (crates, procedure) => {
     for (let i = 0; i < times; i++)
       crates[indexTo].push(crates[indexFrom].pop());
   }
-};
+}
 
-const getCratesOnTop = crates => {
-  let str = '';
-  crates.forEach(crate => (str += crate.pop()));
-  return str;
-};
-
-const crates = [
-  ['Z', 'N'],
-  ['M', 'C', 'D'],
-  ['P']
-];
+function getCratesOnTop(crates) {
+  return crates.reduce((acc, cur) => acc + cur[cur.length - 1], '');
+}
 
 rearrangeCrates(crates, rearrangementProcedure);
 console.log(getCratesOnTop(crates)); // CMZ
