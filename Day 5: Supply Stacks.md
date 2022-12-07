@@ -82,8 +82,7 @@ move 1 from 1 to 2
 `;
 
 function rearrangeCrates(crates, procedure) {
-  const steps = procedure.trim().split('\n');
-  for (const step of steps) {
+  for (const step of procedure.trim().split('\n')) {
     const split = step.split(' ');
     const [times, indexFrom, indexTo] = [split[1], split[3] - 1, split[5] - 1];
     for (let i = 0; i < times; i++)
