@@ -46,15 +46,20 @@ zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw
 
 function getMarkerIndex(datastream) {
   for (let idx = 0; idx < datastream.length; idx++) {
-    let findMarker = true;
     const sequenceLength = 4;
     const characters = datastream.slice(idx, idx + sequenceLength).split('');
-    if (characters < sequenceLength) return -1;
-    for (let a = 0; a < characters.length; a++)
-      for (let b = 0; b < characters.length; b++)
-        if (a !== b)
-          if (characters[a] === characters[b]) findMarker = false;
-    if (findMarker) return idx + sequenceLength;
+    if (characters.length < sequenceLength) return -1;
+    // let findMarker = true;
+    // for (let a = 0; a < characters.length; a++)
+    //   for (let b = 0; b < characters.length; b++)
+    //     if (a !== b)
+    //       if (characters[a] === characters[b]) findMarker = false;
+    // if (findMarker) return idx + sequenceLength;
+    if (
+      characters.filter((item, index) => characters.indexOf(item) !== index)
+        .length === 0
+    )
+      return idx + sequenceLength;
   }
   return -1;
 }
