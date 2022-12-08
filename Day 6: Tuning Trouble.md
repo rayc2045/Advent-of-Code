@@ -44,9 +44,8 @@ nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg
 zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw
 `;
 
-function getMarkerIndex(datastream) {
+function getMarkerIndex(sequenceLength, datastream) {
   for (let idx = 0; idx < datastream.length; idx++) {
-    const sequenceLength = 4;
     const characters = datastream.slice(idx, idx + sequenceLength).split('');
     if (characters.length < sequenceLength) return -1;
     // let findMarker = true;
@@ -67,5 +66,5 @@ function getMarkerIndex(datastream) {
 input
   .trim()
   .split('\n')
-  .forEach(datastream => console.log(getMarkerIndex(datastream)));
+  .forEach(datastream => console.log(getMarkerIndex(4, datastream)));
 ```
