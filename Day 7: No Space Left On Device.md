@@ -120,9 +120,9 @@ Array.prototype.insert = function (index, value) {
   return this.splice(index, 0, value);
 };
 
-function getDirectoriesTree(log) {
+function getFileTree(log) {
   let [tabNum, insertIdx] = [1, 0];
-  const [resultArr, tab] = [['- /'], '  '];
+  const [resultArr, tab] = [['- / (dir)'], '  '];
   log.trim().split('\n').filter(line => !line.startsWith('$ ls')).forEach(line => {
     if (line.startsWith('$ cd /')) return (tabNum = 1);
     if (line.startsWith('$ cd ..')) return tabNum--;
