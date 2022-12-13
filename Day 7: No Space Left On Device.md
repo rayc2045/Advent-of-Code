@@ -84,3 +84,65 @@ The total sizes of the directories above can be found as follows:
 To begin, find all of the directories with a total size of *at most 100000*, then calculate the sum of their total sizes. In the example above, these directories are `a` and `e`; the sum of their total sizes is `95437` (94853 + 584). (As in this example, this process can count files more than once!)
 
 Find all of the directories with a total size of at most 100000. *What is the sum of the total sizes of those directories?*
+
+## JavaScript Solution
+
+```js
+const input = `
+$ cd /
+$ ls
+dir a
+14848514 b.txt
+8504156 c.dat
+dir d
+$ cd a
+$ ls
+dir e
+29116 f
+2557 g
+62596 h.lst
+$ cd e
+$ ls
+584 i
+$ cd ..
+$ cd ..
+$ cd d
+$ ls
+4060174 j
+8033020 d.log
+5626152 d.ext
+7214296 k
+`;
+
+Array.prototype.insert = function (index, value) {
+  if (index === -1) return this.push(value);
+  if (index < -1) index++;
+  return this.splice(index, 0, value);
+};
+
+function getDirectoriesTree(log) {
+  let [tabNum, insertIdx] = [1, 0];
+  const [resultArr, tab] = [['- /'], '  '];
+  log.trim().split('\n').filter(line => !line.startsWith('$ ls')).forEach(line => {
+    if (line.startsWith('$ cd /')) return (tabNum = 1);
+    if (line.startsWith('$ cd ..')) return tabNum--;
+    if (line.startsWith('$ cd')) {
+      const dirName = line.replace('$ cd ', '');
+      tabNum++;
+      const index = resultArr.indexOf(
+        resultArr.find(item => item.includes(`- ${dirName} (dir)`))
+      );
+      return (insertIdx = index);
+    }
+    if (line.startsWith('dir ')) {
+      const dirName = line.replace('dir ', '');
+      return resultArr.insert(insertIdx, `${tab.repeat(tabNum)}- ${dirName} (dir)`);
+    }
+    if (Number(line.split(' ')[0]) > 0) {
+      const [fileName, fileSize] = [line.split(' ')[1], line.split(' ')[0]];
+      resultArr.insert(insertIdx, `${tab.repeat(tabNum)}- ${fileName} (file, size=${fileSize})`);
+    }
+  });
+  return resultArr.reverse().join('\n');
+}
+```
