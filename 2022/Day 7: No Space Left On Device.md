@@ -117,32 +117,77 @@ $ ls
 Array.prototype.insert = function (index, value) {
   if (index === -1) return this.push(value);
   if (index < -1) index++;
-  return this.splice(index, 0, value);
+  this.splice(index, 0, value);
 };
 
 function getFileTree(log) {
   let [tabNum, insertIdx] = [1, 0];
   const [resultArr, tab] = [['- / (dir)'], '  '];
-  log.trim().split('\n').filter(line => !line.startsWith('$ ls')).forEach(line => {
-    if (line.startsWith('$ cd /')) return (tabNum = 1);
-    if (line.startsWith('$ cd ..')) return tabNum--;
-    if (line.startsWith('$ cd')) {
-      const dirName = line.replace('$ cd ', '');
-      tabNum++;
-      const index = resultArr.indexOf(
-        resultArr.find(item => item.includes(`- ${dirName} (dir)`))
+  log
+    .trim()
+    .split('\n')
+    .filter(line => !line.startsWith('$ ls'))
+    .forEach(line => {
+      if (line.startsWith('$ cd /')) return (tabNum = 1);
+      if (line.startsWith('$ cd ..')) return tabNum--;
+      if (line.startsWith('$ cd')) {
+        const dirName = line.replace('$ cd ', '');
+        tabNum++;
+        const index = resultArr.indexOf(
+          resultArr.find(item => item.includes(`- ${dirName} (dir)`))
+        );
+        return (insertIdx = index);
+      }
+      if (line.startsWith('dir ')) {
+        const dirName = line.replace('dir ', '');
+        return resultArr.insert(
+          insertIdx,
+          `${tab.repeat(tabNum)}- ${dirName} (dir)`
+        );
+      }
+      const splits = line.split(' ');
+      const [fileName, fileSize] = [splits[1], splits[0]];
+      resultArr.insert(
+        insertIdx,
+        `${tab.repeat(tabNum)}- ${fileName} (file, size=${fileSize})`
       );
-      return (insertIdx = index);
-    }
-    if (line.startsWith('dir ')) {
-      const dirName = line.replace('dir ', '');
-      return resultArr.insert(insertIdx, `${tab.repeat(tabNum)}- ${dirName} (dir)`);
-    }
-    if (Number(line.split(' ')[0]) > 0) {
-      const [fileName, fileSize] = [line.split(' ')[1], line.split(' ')[0]];
-      resultArr.insert(insertIdx, `${tab.repeat(tabNum)}- ${fileName} (file, size=${fileSize})`);
-    }
-  });
+    });
   return resultArr.reverse().join('\n');
 }
+
+function getDirTreeWithSize(fileTree) {
+  const [resultArr, dirs, splitWord] = [[], [], '(dir, size='];
+  let [level, type] = [0, 'dir'];
+  fileTree.split('\n').forEach(item => {
+    const currentLevel = item.indexOf('-') / 2;
+    if (currentLevel < level) dirs.pop();
+    level = currentLevel;
+    if (item.includes('(dir)')) {
+      dirs.push(item.replace('-', '').replace('(dir)', '').trim());
+      resultArr.push(item.replace('(dir)', splitWord));
+      return;
+    }
+    if (item.includes('(file')) {
+      const size = Number(item.split('(file, size=')[1].replace(')', ''));
+      dirs.forEach(dir => {
+        const index = resultArr.indexOf(
+          resultArr.find(item => item.includes(`- ${dir}`))
+        );
+        const splits = resultArr[index].split(splitWord);
+        resultArr[index] = `${splits[0]}${splitWord}${
+          Number(splits[1].replace(')', '')) + size
+        })`;
+      });
+    }
+  });
+  return resultArr.join('\n');
+}
+
+console.log(
+  getDirTreeWithSize(getFileTree(input))
+    .split('\n')
+    .map(item => Number(item.split('(dir, size=')[1].replace(')', '')))
+    .filter(size => size < 100_000)
+    .reduce((acc, cur) => acc + cur)
+);
 ```
