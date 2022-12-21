@@ -69,6 +69,7 @@ function countVisible(grid) {
         break;
       }
     }
+
     let isRightVisible = true;
     for (let rightIdx = gridArr[row].length - 1; rightIdx > idx; rightIdx--) {
       if (gridArr[row][rightIdx] >= currentHeight) {
@@ -76,6 +77,7 @@ function countVisible(grid) {
         break;
       }
     }
+
     let isTopVisible = true;
     for (let topIdx = 0; topIdx < row; topIdx++) {
       if (gridArr[topIdx][idx] >= currentHeight) {
@@ -83,6 +85,7 @@ function countVisible(grid) {
         break;
       }
     }
+
     let isBottomVisible = true;
     for (let bottomIdx = gridArr.length - 1; bottomIdx > row; bottomIdx--) {
       if (gridArr[bottomIdx][idx] >= currentHeight) {
@@ -90,6 +93,7 @@ function countVisible(grid) {
         break;
       }
     }
+
     return isLeftVisible || isRightVisible || isTopVisible || isBottomVisible;
   };
 
