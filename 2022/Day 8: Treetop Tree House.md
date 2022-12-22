@@ -49,46 +49,46 @@ function countVisible(grid) {
     .split('\n')
     .map(item => item.split('').map(str => Number(str)));
 
-  const checkVisible = (row, idx) => {
+  const checkVisible = (rowIdx, columnIdx) => {
     // edge
     if (
-      row === 0 ||
-      row === gridArr.length - 1 ||
-      (row !== 0 && idx === 0) ||
-      (row !== 0 && idx === gridArr[row].length - 1)
+      rowIdx === 0 ||
+      rowIdx === gridArr.length - 1 ||
+      (rowIdx !== 0 && columnIdx === 0) ||
+      (rowIdx !== 0 && columnIdx === gridArr[rowIdx].length - 1)
     )
       return true;
 
     // interior
-    const currentHeight = gridArr[row][idx];
+    const currentHeight = gridArr[rowIdx][columnIdx];
 
     let isLeftVisible = true;
-    for (let leftIdx = 0; leftIdx < idx; leftIdx++) {
-      if (gridArr[row][leftIdx] >= currentHeight) {
+    for (let leftIdx = 0; leftIdx < columnIdx; leftIdx++) {
+      if (gridArr[rowIdx][leftIdx] >= currentHeight) {
         isLeftVisible = false;
         break;
       }
     }
 
     let isRightVisible = true;
-    for (let rightIdx = gridArr[row].length - 1; rightIdx > idx; rightIdx--) {
-      if (gridArr[row][rightIdx] >= currentHeight) {
+    for (let rightIdx = gridArr[rowIdx].length - 1; rightIdx > columnIdx; rightIdx--) {
+      if (gridArr[rowIdx][rightIdx] >= currentHeight) {
         isRightVisible = false;
         break;
       }
     }
 
     let isTopVisible = true;
-    for (let topIdx = 0; topIdx < row; topIdx++) {
-      if (gridArr[topIdx][idx] >= currentHeight) {
+    for (let topIdx = 0; topIdx < rowIdx; topIdx++) {
+      if (gridArr[topIdx][columnIdx] >= currentHeight) {
         isTopVisible = false;
         break;
       }
     }
 
     let isBottomVisible = true;
-    for (let bottomIdx = gridArr.length - 1; bottomIdx > row; bottomIdx--) {
-      if (gridArr[bottomIdx][idx] >= currentHeight) {
+    for (let bottomIdx = gridArr.length - 1; bottomIdx > rowIdx; bottomIdx--) {
+      if (gridArr[bottomIdx][columnIdx] >= currentHeight) {
         isBottomVisible = false;
         break;
       }
@@ -99,9 +99,9 @@ function countVisible(grid) {
 
   let count = 0;
 
-  for (let row = 0; row < gridArr.length; row++)
-    for (let idx = 0; idx < gridArr[row].length; idx++)
-      count += Number(checkVisible(row, idx));
+  for (let rowIdx = 0; rowIdx < gridArr.length; rowIdx++)
+    for (let columnIdx = 0; columnIdx < gridArr[rowIdx].length; columnIdx++)
+      count += Number(checkVisible(rowIdx, columnIdx));
 
   return count;
 }
