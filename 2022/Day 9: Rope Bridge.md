@@ -23,7 +23,7 @@ Due to the aforementioned Planck lengths, the rope must be quite short; in fact,
 . . . .
 
 . . .
-. H . (H covers T)
+. H .  (H covers T)
 . . .
 ```
 
@@ -260,5 +260,76 @@ Simulate your complete hypothetical series of motions. *How many positions does 
 ## JavaScript Solution
 
 ```js
+const input = `
+R 4
+U 4
+L 3
+D 1
+R 4
+D 1
+L 5
+R 2
+`;
 
+function createGridArr(element, columns, rows) {
+  const arr = `${String(element).repeat(columns)}\n`.repeat(rows).split('\n');
+  arr.length--;
+  if (typeof element === 'number')
+    return arr.map(row => row.split('').map(item => Number(item)));
+  return arr.map(row => row.split(''));
+}
+
+function getTailPath(moves, startingPosition = [0, 0], marks = ['.', '#', 's']) {
+  const [sx, sy] = [startingPosition[1], startingPosition[0]];
+  let [hx, hy, tx, ty] = [sx, sy, sx, sy];
+  const tailPath = createGridArr(marks[0], 6, 5);
+  const countDiff = () => Math.abs(hx - tx) + Math.abs(hy - ty);
+  const markTailPosition = () => (tailPath[ty][tx] = marks[1]);
+
+  moves.trim().split('\n').forEach(move => {
+    const [direction, step] = move.split(' ');
+
+    for (let i = 0; i < +step; i++) {
+      if (direction === 'R') {
+        hx++;
+        if (ty === hy && countDiff() >= 2) tx++;
+        else if (ty !== hy && countDiff() >= 3) {
+          ty = hy;
+          tx++;
+        }
+      } else if (direction === 'L') {
+        hx--;
+        if (ty === hy && countDiff() >= 2) tx--;
+        else if (ty !== hy && countDiff() >= 3) {
+          ty = hy;
+          tx--;
+        }
+      } else if (direction === 'U') {
+        hy--;
+        if (tx === hx && countDiff() >= 2) ty--;
+        else if (tx !== hx && countDiff() >= 3) {
+          tx = hx;
+          ty--;
+        }
+      } else if (direction === 'D') {
+        hy++;
+        if (tx === hx && countDiff() >= 2) ty++;
+        else if (tx !== hx && countDiff() >= 3) {
+          tx = hx;
+          ty++;
+        }
+      }
+
+      markTailPosition();
+    }
+  });
+
+  tailPath[sy][sx] = marks[2];
+  return tailPath;
+}
+
+console.log(
+  getTailPath(input, [4, 0], [0, 1, 1])
+    .reduce((acc, cur) => acc + cur.reduce((a, b) => a + b), 0) // 13
+);
 ```
