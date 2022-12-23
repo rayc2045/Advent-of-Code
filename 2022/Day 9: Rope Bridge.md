@@ -272,9 +272,11 @@ R 2
 `;
 
 function createGridArr(element, columns, rows) {
-  const arr = `${String(element).repeat(columns)}\n`.repeat(rows).split('\n');
-  arr.length--;
-  return arr.map(row => row.split(''));
+  return `${String(element).repeat(columns)}\n`
+    .repeat(rows)
+    .trim()
+    .split('\n')
+    .map(row => row.split(''));
 }
 
 function getTailPath(moves, startingPosition = [0, 0], marks = ['.', '#', 's']) {
