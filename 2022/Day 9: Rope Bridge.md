@@ -274,8 +274,6 @@ R 2
 function createGridArr(element, columns, rows) {
   const arr = `${String(element).repeat(columns)}\n`.repeat(rows).split('\n');
   arr.length--;
-  if (typeof element === 'number')
-    return arr.map(row => row.split('').map(item => Number(item)));
   return arr.map(row => row.split(''));
 }
 
@@ -284,7 +282,6 @@ function getTailPath(moves, startingPosition = [0, 0], marks = ['.', '#', 's']) 
   let [hx, hy, tx, ty] = [sx, sy, sx, sy];
   const tailPath = createGridArr(marks[0], 6, 5);
   const countDiff = () => Math.abs(hx - tx) + Math.abs(hy - ty);
-  const markTailPosition = () => (tailPath[ty][tx] = marks[1]);
 
   moves.trim().split('\n').forEach(move => {
     const [direction, step] = move.split(' ');
@@ -320,16 +317,18 @@ function getTailPath(moves, startingPosition = [0, 0], marks = ['.', '#', 's']) 
         }
       }
 
-      markTailPosition();
+      tailPath[ty][tx] = marks[1];
     }
   });
 
   tailPath[sy][sx] = marks[2];
-  return tailPath;
+  return tailPath.map(item => item.join(' ')).join('\n');
 }
 
 console.log(
   getTailPath(input, [4, 0], [0, 1, 1])
-    .reduce((acc, cur) => acc + cur.reduce((a, b) => a + b), 0) // 13
+    .replaceAll('\n', ' ')
+    .split(' ')
+    .reduce((acc, cur) => acc + Number(cur), 0) // 13
 );
 ```
