@@ -289,34 +289,42 @@ function getTailPath(moves, startingPosition = [0, 0], marks = ['.', '#', 's']) 
     const [direction, step] = move.split(' ');
 
     for (let i = 0; i < +step; i++) {
-      if (direction === 'R') {
-        hx++;
-        if (ty === hy && countDiff() >= 2) tx++;
-        else if (ty !== hy && countDiff() >= 3) {
-          ty = hy;
-          tx++;
-        }
-      } else if (direction === 'L') {
-        hx--;
-        if (ty === hy && countDiff() >= 2) tx--;
-        else if (ty !== hy && countDiff() >= 3) {
-          ty = hy;
-          tx--;
-        }
-      } else if (direction === 'U') {
-        hy--;
-        if (tx === hx && countDiff() >= 2) ty--;
-        else if (tx !== hx && countDiff() >= 3) {
-          tx = hx;
-          ty--;
-        }
-      } else if (direction === 'D') {
-        hy++;
-        if (tx === hx && countDiff() >= 2) ty++;
-        else if (tx !== hx && countDiff() >= 3) {
-          tx = hx;
-          ty++;
-        }
+      switch (direction) {
+        case 'R':
+          hx++;
+          if (ty === hy && countDiff() >= 2) tx++;
+          else if (ty !== hy && countDiff() >= 3) {
+            ty = hy;
+            tx++;
+          }
+          break;
+
+        case 'L':
+          hx--;
+          if (ty === hy && countDiff() >= 2) tx--;
+          else if (ty !== hy && countDiff() >= 3) {
+            ty = hy;
+            tx--;
+          }
+          break;
+
+        case 'U':
+          hy--;
+          if (tx === hx && countDiff() >= 2) ty--;
+          else if (tx !== hx && countDiff() >= 3) {
+            tx = hx;
+            ty--;
+          }
+          break;
+
+        case 'D':
+          hy++;
+          if (tx === hx && countDiff() >= 2) ty++;
+          else if (tx !== hx && countDiff() >= 3) {
+            tx = hx;
+            ty++;
+          }
+          break;
       }
 
       tailPath[ty][tx] = marks[1];
